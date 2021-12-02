@@ -4,13 +4,21 @@ import java.util.List;
 import java.util.Queue;
 
 public class Floor {
-    private Integer id;
-    protected List<Passanger> waiters;
+    public Integer id;
+    private Integer liftId;
+    public List<Passanger> waiters;
 
-    public Floor(Integer id, List<Passanger> waiters) {
+    public Floor(Integer id, Integer liftId) {
         this.id = id;
+        this.liftId = liftId;
+    }
+
+    public Floor(Integer id, Integer liftId, List<Passanger> waiters) {
+        this.id = id;
+        this.liftId = liftId;
         this.waiters = waiters;
     }
+
 
     public void addPerson(Passanger person) {
         waiters.add(person);

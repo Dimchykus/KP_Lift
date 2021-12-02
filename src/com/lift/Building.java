@@ -12,4 +12,9 @@ public class Building {
         this.floors = floors;
         this.lifts = lifts;
     }
+
+    public Floor GetFloor(Integer id){
+        List<Floor> result = floors.stream().filter(f -> f.id == id).toList();
+        return result.get(0);
+    }
 }

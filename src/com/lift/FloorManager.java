@@ -12,4 +12,9 @@ public class FloorManager {
         Id+=1;
         return new Floor(Id,passangerList);
     }
+
+    public List<Passanger> getListOfPassagers(Integer floorId){
+
+    }
+
 }

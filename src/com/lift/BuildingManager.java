@@ -46,8 +46,8 @@ public class BuildingManager {
 
             while(floorCounter-- > 0) {
                 var passangers = new ArrayList<Passanger>();
-                var floor = new Floor(counter - 1, passangers);
-                floors.add(floor);
+//                var floor = new Floor(counter - 1,);
+//                floors.add(floor);
             }
 
 //            building = new Building(counter, floors, lifts);
