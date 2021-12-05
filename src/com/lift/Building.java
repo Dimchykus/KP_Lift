@@ -1,20 +1,19 @@
 package com.lift;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Building {
     private Integer id;
-    public List<Floor> floors;
-    public List<Lift> lifts;
+    public List<Entrance> entrances = new ArrayList<>();
 
-    public Building(Integer id, List<Floor> floors, List<Lift> lifts) {
+    public Building(Integer id, Integer floorCount, Integer entranceCount) {
         this.id = id;
-        this.floors = floors;
-        this.lifts = lifts;
+
+        for(int i =0 ;i < entranceCount; i++){
+            entrances.add(new Entrance(floorCount, i));
+        }
+
     }
 
-    public Floor GetFloor(Integer id){
-        List<Floor> result = floors.stream().filter(f -> f.id == id).toList();
-        return result.get(0);
-    }
 }

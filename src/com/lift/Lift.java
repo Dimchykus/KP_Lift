@@ -1,5 +1,9 @@
 package com.lift;
 
+import com.lift.interfaces.iEntrance;
+import com.lift.strategy.LiftMoveStrategy;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,54 +12,92 @@ public class Lift {
     public Double weight;
     public Integer maxPeople;
     public Floor currentFloor;
-    public List<Passanger> passangerList;
+    public List<Passenger> passangerList;
     private List<Command> commandList;
+    public LiftMoveStrategy strategy;
+    public iEntrance entrance;
 
     public Lift() {
 
     }
 
-    public Lift(Integer Id, Double weight, Integer maxPeople, Floor currentFloor, List<Command> commandList) {
+    public Lift(Integer Id, Double weight, Integer maxPeople, Floor currentFloor, List<Command> commandList, iEntrance entrance) {
         this.id = id;
         this.currentFloor = currentFloor;
         this.maxPeople = maxPeople;
         this.weight = weight;
         this.commandList = commandList;
+        this.entrance = entrance;
     }
 
-    public boolean Move() {
-        for (Command command : commandList) {
-            currentFloor = command.FloorToGo;
+    public void DoCommand(Command com, List<Floor> floorList) {
 
-            List<Passanger> pick = passangerList.stream().filter(passanger -> command.PassengersToPick.contains(passanger)).collect(Collectors.toList());
-//            List<Passanger> pick = passangerList.stream().filter(command.PassengersToPick.stream().filter(passanger -> passangerList.contains(passanger)).collect(Collectors.toSet()));
+        this.currentFloor = floorList.get(com.FloorToGo);
+        switch (com.CommandType) {
+            case Take -> {
+                List<Passenger> lefters = new ArrayList<>();
+                for (Passenger p : currentFloor.waiters
+                ) {
+                    double weight = 0;
+                    for (Passenger psng : passangerList) {
+                        weight += psng.weight;
+                    }
+                    if (passangerList.size() < maxPeople && weight + p.weight < this.weight) {
+                        passangerList.add(p);
+                    } else {
+                        lefters.add(p);
+                        entrance.AddToCallList(p.currentFloor);
+                    }
+                }
+                currentFloor.waiters = lefters;
 
+                System.out.println(this.currentFloor.id + " Take");
+                break;
+            }
+            case Land -> {
 
-            passangerList.addAll(pick);
-            currentFloor = command.FloorToLeave;
+                List<Passenger> toLeave = new ArrayList<>();
 
-            // спільні пасажири  leave
-            // passangerList
-            // command.LeavingPassengers
-            List<Passanger> leave; // =
+                for (Passenger pas : passangerList
+                ) {
+                    if (pas.destinationFloor == this.currentFloor.id) {
+                        toLeave.add(pas);
+                    }
+                }
 
+                System.out.println(this.currentFloor.id + " Land");
+                passangerList = passangerList.stream()
+                        .filter(val -> !toLeave.contains(val))
+                        .collect(Collectors.toList());
 
-            // видалити спільних пасажирів leave звідси ->
-//            passangerList.stream()
-
+                currentFloor.leavers.addAll(toLeave);
+                break;
+            }
         }
+    }
+
+    public boolean Move(LiftMoveStrategy strategy, List<Integer> callList, List<Floor> floorList) {
+
+        List<Command> list = strategy.CreateCommandList(callList, currentFloor, floorList);
+        this.commandList = list;
+
+        for (Command com : commandList
+        ) {
+            this.DoCommand(com, floorList);
+        }
+
         return true;
     }
 
 
-    private boolean canAddPassanger(Passanger passanger) {
+    private boolean canAddPassanger(Passenger passanger) {
         if (passangerList.size() < maxPeople && getPassangersWeight() + passanger.weight <= weight)
             return true;
 
         return false;
     }
 
-    private void addPerson(Passanger passanger) {
+    private void addPerson(Passenger passanger) {
         if (canAddPassanger(passanger))
             passangerList.add(passanger);
     }
@@ -69,13 +111,13 @@ public class Lift {
 
     private double GetWeight() {
         double x = 0;
-        for (Passanger pass : passangerList) {
+        for (Passenger pass : passangerList) {
             x += pass.weight;
         }
         return x;
     }
 
     private void test() {
-        passangerList.
+        // passangerList.
     }
 }

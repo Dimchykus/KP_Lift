@@ -1,30 +1,32 @@
 package com.lift;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class Floor {
     public Integer id;
-    private Integer liftId;
-    public List<Passanger> waiters;
 
-    public Floor(Integer id, Integer liftId) {
+    public List<Passenger> waiters =  new ArrayList<>();
+    public List<Passenger> leavers =  new ArrayList<>();
+
+    public Floor(Integer id) {
         this.id = id;
-        this.liftId = liftId;
+
     }
 
-    public Floor(Integer id, Integer liftId, List<Passanger> waiters) {
+    public Floor(Integer id, List<Passenger> waiters) {
         this.id = id;
-        this.liftId = liftId;
+
         this.waiters = waiters;
+        this.leavers = new ArrayList<>();
     }
 
 
-    public void addPerson(Passanger person) {
+    public void addPerson(Passenger person) {
         waiters.add(person);
     }
 
-    public void removePerson(Passanger person) {
+    public void removePerson(Passenger person) {
         waiters.remove(person);
     }
 }

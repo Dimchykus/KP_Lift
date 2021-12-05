@@ -1,18 +1,17 @@
 package com.lift;
 
+import com.lift.enums.CommandType;
+
 import java.util.HashMap;
 import java.util.List;
 
 public class Command {
-    public Floor FloorToGo;
-    public Floor FloorToLeave;
-    List<Integer> PassengersToPick;
-    List<Integer> LeavingPassengers;
+    public int FloorToGo;
+    public CommandType CommandType;
 
-    public Command(Floor FloorToGo, Floor FloorToLeave, List<Integer> PassengersToPick, List<Integer> LeavingPassengers) {
+    public Command(int FloorToGo, CommandType CommandType) {
         this.FloorToGo = FloorToGo;
-        this.FloorToLeave = FloorToLeave;
-        this.PassengersToPick = PassengersToPick;
-        this.LeavingPassengers = LeavingPassengers;
+        this.CommandType = CommandType;
     }
 }
+
